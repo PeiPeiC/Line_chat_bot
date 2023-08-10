@@ -85,7 +85,7 @@ def get_university_ranking(user_message):
 
 # Add a global variable to keep track of the state
 waiting_for_university_name = False
-
+count = 0
 @handler.add(MessageEvent, message=TextMessage)
 def handle_text_message(event):
     global waiting_for_university_name
@@ -163,10 +163,11 @@ def handle_text_message(event):
         waiting_for_university_name = True  # Set the state to True
         line_bot_api.reply_message(
             event.reply_token,
-            TextSendMessage(text="請輸入學校名稱(全名為佳)")
+            TextSendMessage(text="請輸入學校名稱(英文全名為佳)\n 可繼續搜尋10次，離開請輸入0或stop")
         )
 
     elif waiting_for_university_name:
+        count += 1
         # Now the user has entered the university name after receiving the "請輸入學校名稱(全名)" message
         # Get the university ranking information
         print("Received university name:", user_message)  # Add this line for logging
@@ -179,7 +180,11 @@ def handle_text_message(event):
             TextSendMessage(text=reply_text)
         )
         
-        waiting_for_university_name = False  # Reset the state after handling the input
+        if user_message == 'stop' or user_message == '0' or count >=10 :
+            waiting_for_university_name = False
+            count = 0
+            # Reset the state after handling the input
+            
 
 
     else:
