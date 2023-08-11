@@ -10,8 +10,10 @@ from django.views.decorators.csrf import csrf_exempt
 import json
 import os
 
-line_bot_api = LineBotApi('CQm0BL4z/a2K/U83zm7QbTMWGBkmjlUXvurjeYQxHXNKZy5uUmpcUzaV+xY1oM/JbDxttHOkIWtSfCucgDvtRiiSCq1p6fmx7neitBe3GZ5B11Fq8IHyUGRB2o/w3b7U4TP7miGzB9ibjyKuQhx59AdB04t89/1O/w1cDnyilFU=')
+line_bot_api = LineBotApi(
+    'CQm0BL4z/a2K/U83zm7QbTMWGBkmjlUXvurjeYQxHXNKZy5uUmpcUzaV+xY1oM/JbDxttHOkIWtSfCucgDvtRiiSCq1p6fmx7neitBe3GZ5B11Fq8IHyUGRB2o/w3b7U4TP7miGzB9ibjyKuQhx59AdB04t89/1O/w1cDnyilFU=')
 handler = WebhookHandler('ba98c88fab9fdec489f9b5bb31e53fe0')
+
 
 @csrf_exempt  # Add this decorator to bypass CSRF verification for Line webhook
 def line_webhook(request):
@@ -29,23 +31,27 @@ def line_webhook(request):
 # Use the relative path to the 'rankings' directory
 RANKINGS_DIR = os.path.join(os.path.dirname(__file__), 'rankings')
 
+
 def load_ranking_data(source):
     file_path = os.path.join(RANKINGS_DIR, f"{source}_rankings.json")
     with open(file_path, encoding='utf-8') as file:
         return json.load(file)
 
+
 def search_university_rankings(keyword):
     all_data = []
     sources = ["ARWU", "QS", "THE"]
-    
+
     for source in sources:
         data = load_ranking_data(source)
         all_data.extend(data)
 
     keyword_lower = keyword.lower()
-    results = [entry for entry in all_data if keyword_lower in entry['University'].lower()]
+    results = [
+        entry for entry in all_data if keyword_lower in entry['University'].lower()]
     print("Search results:", results)  # Add this line for logging
     return results
+
 
 def get_university_ranking(user_message):
     search_results = search_university_rankings(user_message)
@@ -73,7 +79,9 @@ def get_university_ranking(user_message):
 
         reply_text = ""
         for university_name, rankings in universities.items():
-            sorted_rankings = sorted(rankings, key=lambda x: x[0], reverse=True)  # Sort by year in descending order
+            # Sort by year in descending order
+            sorted_rankings = sorted(
+                rankings, key=lambda x: x[0], reverse=True)
             reply_text += f"{university_name}\n"
             for year, source, ranking in sorted_rankings:
                 reply_text += f"{year} {source}: {ranking}\n"
@@ -83,13 +91,48 @@ def get_university_ranking(user_message):
 
     return reply_text
 
-# Add a global variable to keep track of the state
-waiting_for_university_name = False
-count = 0
+
+user_states = {}  # 使用字典來存儲每個用戶的狀態和計數器
+
+
 @handler.add(MessageEvent, message=TextMessage)
 def handle_text_message(event):
-    global waiting_for_university_name
+    user_id = event.source.user_id  # 獲取用戶ID
+    # 初始化用戶狀態和計數器
+    if user_id not in user_states:
+        user_states[user_id] = {
+            "waiting_for_university_name": False, "count": 0}
     user_message = event.message.text
+
+    if "查詢學校排名" in user_message:
+        user_states[user_id]["waiting_for_university_name"] = True
+        line_bot_api.reply_message(
+            event.reply_token,
+            TextSendMessage(text="請輸入學校名稱(英文全名為佳)\n 可連續搜尋10次，離開請輸入0或Exit")
+        )
+
+    elif user_states[user_id]["waiting_for_university_name"]:
+        # Safety check to ensure 'count' key exists
+        if "count" not in user_states[user_id]:
+            user_states[user_id]["count"] = 0
+        user_states[user_id]["count"] += 1
+
+        # Now the user has entered the university name after receiving the "請輸入學校名稱(全名)" message
+        # Get the university ranking information
+        # Add this line for logging
+        print("Received university name:", user_message)
+        reply_text = get_university_ranking(user_message)
+        print("Reply text:", reply_text)  # Add this line for logging
+
+        # Send the ranking information back to the user
+        line_bot_api.reply_message(
+            event.reply_token,
+            TextSendMessage(text=reply_text)
+        )
+
+        if user_message == 'Exit' or user_message == '0' or user_states[user_id]["count"] >= 10:
+            user_states[user_id]["waiting_for_university_name"] = False
+            user_states[user_id]["count"] = 0
 
     if user_message == "學校清單":
         reply_text = "Computer Science Conversion Programmes List\n"
@@ -107,27 +150,33 @@ def handle_text_message(event):
                         title="英語系論壇",
                         text="可以到各校校版查詢申請進度",
                         actions=[
-                            URIAction(label="The Student Room", uri="https://www.thestudentroom.co.uk/"),
-                            URIAction(label="Reddit", uri="https://www.reddit.com/?feed=home")                           
+                            URIAction(label="The Student Room",
+                                      uri="https://www.thestudentroom.co.uk/"),
+                            URIAction(label="Reddit",
+                                      uri="https://www.reddit.com/?feed=home")
                         ]
                     ),
                     CarouselColumn(
                         title="大陸論壇",
                         text="可查詢#轉碼申請#轉碼項目推薦",
                         actions=[
-                            URIAction(label="一畝三分地", uri="https://www.1point3acres.com/bbs/"),
-                            URIAction(label="小紅書", uri="https://www.xiaohongshu.com/search_result?keyword=%25E8%25BD%25AC%25E7%25A0%2581%25E7%2595%2599%25E5%25AD%25A6&source=web_search_result_notes"),
-                            
+                            URIAction(label="一畝三分地",
+                                      uri="https://www.1point3acres.com/bbs/"),
+                            URIAction(
+                                label="小紅書", uri="https://www.xiaohongshu.com/search_result?keyword=%25E8%25BD%25AC%25E7%25A0%2581%25E7%2595%2599%25E5%25AD%25A6&source=web_search_result_notes"),
+
                         ]
                     ),
                     CarouselColumn(
                         title="台灣論壇",
                         text="PTT另有英國留學版、荷蘭留學版、雅思版",
                         actions=[
-                            URIAction(label="PTT 留學版", uri="https://www.pttweb.cc/bbs/studyabroad"),
-                            URIAction(label="Dcard 留學版", uri="https://www.dcard.tw/f/studyabroad"),
+                            URIAction(
+                                label="PTT 留學版", uri="https://www.pttweb.cc/bbs/studyabroad"),
+                            URIAction(label="Dcard 留學版",
+                                      uri="https://www.dcard.tw/f/studyabroad"),
                         ]
-                    ),            
+                    ),
                 ]
             )
         )
@@ -137,55 +186,26 @@ def handle_text_message(event):
             reply_message
         )
 
-
-
     elif user_message == "獎學金資訊":
-            reply_text = "獎學金資訊:\n"
-            reply_text += "1. 學校自行提供校內獎學金: 至各校網站查詢 Scholarship and Funding\n"
-            reply_text += "2. 英國文化協會 IELTS Prize 雅思獎金(限在 British Council 考雅思的人申請): https://tw.ieltsasia.org/IELTS%E7%8D%8E%E9%87%91\n"
-            reply_text += "3. 留學代辦提供的獎學金:\n"
-            reply_text += "- IDP\n"
-            reply_text += "- Intake Impact Scholarship (限透過 Intake 遞交申請的學生): https://intake.education/tw/intake-impact-scholarship\n"
-            reply_text += "4. Chevening Scholarships (注意有返台義務不能申請 PSW): https://www.chevening.org/scholarships/\n"
-            reply_text += "5. Scottish Power 限特定校系: https://www.scottishpower.com/pages/scottishpower_masters_scholarships.aspx\n"
-            reply_text += "6. 其他獎學金查詢平台:\n"
-            reply_text += "- International Scholarships Search: https://www.internationalscholarships.com/\n"
-            reply_text += "- International Students: https://www.internationalstudent.com/scholarships/\n"
-            reply_text += "- scholars4dev: https://www.scholars4dev.com/category/scholarships-list/\n"
-            reply_text += "- Scholarship Portal: https://www.scholarshipportal.com/\n"
-            reply_text += "- Postgraduate Studentships(UK): https://www.postgraduatestudentships.co.uk/\n"
+        reply_text = "獎學金資訊:\n"
+        reply_text += "1. 學校自行提供校內獎學金: 至各校網站查詢 Scholarship and Funding\n"
+        reply_text += "2. 英國文化協會 IELTS Prize 雅思獎金(限在 British Council 考雅思的人申請): https://tw.ieltsasia.org/IELTS%E7%8D%8E%E9%87%91\n"
+        reply_text += "3. 留學代辦提供的獎學金:\n"
+        reply_text += "- IDP\n"
+        reply_text += "- Intake Impact Scholarship (限透過 Intake 遞交申請的學生): https://intake.education/tw/intake-impact-scholarship\n"
+        reply_text += "4. Chevening Scholarships (注意有返台義務不能申請 PSW): https://www.chevening.org/scholarships/\n"
+        reply_text += "5. Scottish Power 限特定校系: https://www.scottishpower.com/pages/scottishpower_masters_scholarships.aspx\n"
+        reply_text += "6. 其他獎學金查詢平台:\n"
+        reply_text += "- International Scholarships Search: https://www.internationalscholarships.com/\n"
+        reply_text += "- International Students: https://www.internationalstudent.com/scholarships/\n"
+        reply_text += "- scholars4dev: https://www.scholars4dev.com/category/scholarships-list/\n"
+        reply_text += "- Scholarship Portal: https://www.scholarshipportal.com/\n"
+        reply_text += "- Postgraduate Studentships(UK): https://www.postgraduatestudentships.co.uk/\n"
 
-            line_bot_api.reply_message(
-                event.reply_token,
-                TextSendMessage(text=reply_text)
-            )
-    elif "查詢學校排名" in user_message:
-        waiting_for_university_name = True  # Set the state to True
-        line_bot_api.reply_message(
-            event.reply_token,
-            TextSendMessage(text="請輸入學校名稱(英文全名為佳)\n 可繼續搜尋10次，離開請輸入0或stop")
-        )
-
-    elif waiting_for_university_name:
-        count += 1
-        # Now the user has entered the university name after receiving the "請輸入學校名稱(全名)" message
-        # Get the university ranking information
-        print("Received university name:", user_message)  # Add this line for logging
-        reply_text = get_university_ranking(user_message)
-        print("Reply text:", reply_text)  # Add this line for logging
-
-        # Send the ranking information back to the user
         line_bot_api.reply_message(
             event.reply_token,
             TextSendMessage(text=reply_text)
         )
-        
-        if user_message == 'stop' or user_message == '0' or count >=10 :
-            waiting_for_university_name = False
-            count = 0
-            # Reset the state after handling the input
-            
-
 
     else:
         # Handle other cases with a carousel template
