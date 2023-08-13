@@ -73,7 +73,7 @@ To use our Line ChatBot for the CS conversion programme application, follow thes
 
 3. **Install Dependencies**:
    - Activate the virtual environment you created in the previous step.
-   - Use the `pip install` command to install all the packages listed in the `requirements.txt` file. This ensures that the necessary libraries are available for your ChatBot.
+   - Use the `pip install -r requirements.txt` command to install all the packages listed in the `requirements.txt` file. This ensures that the necessary libraries are available for your ChatBot.
 
 4. **Ngrok Setup**:
    - Download the `ngrok` executable from the official website. Ngrok is a tool that allows you to create a secure tunnel to your local development server.

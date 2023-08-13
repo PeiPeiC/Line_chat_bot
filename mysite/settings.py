@@ -27,7 +27,7 @@ SECRET_KEY = 'django-insecure-+j2f_kffd5oayx87)_1j9)_ja=+%q5_w)tz^5(is7u0v##7d6w
 DEBUG = True
 
 ALLOWED_HOSTS = ['cs-conversion-line-chatbot.onrender.com',
-                 '6a3b-2001-b400-e209-c92c-1d2e-53de-ca91-62b2.ngrok-free.app', '127.0.0.1']
+                 '82bc-220-138-234-89.ngrok-free.app', '127.0.0.1']
 
 
 # Application definition
