@@ -5,9 +5,15 @@
 Welcome to our Line ChatBot designed to assist aspiring students interested in the CS conversion programme application process. This ChatBot provides information, answers queries, and guides users through the application procedure for the Computer Science (CS) conversion programme.
 
 ## Getting Started
+To use this Line ChatBot for the CS conversion programme application, follow these steps:
 
-To use our Line ChatBot for the CS conversion programme application, follow these steps:
+### For Users
+1. **Download Line app**
+2. **Scan this QRcode to add line friend**
+<img width="269" alt="Line chat bot QRcode" src="https://github.com/PeiPeiC/Line_chat_bot/assets/104357328/a21dd7d8-2409-4bc0-9cd0-a3a87b7e9447">
+Start to chat !
 
+### for Developers
 1. **Create Line Messaging API Account**:
    - Go to the Line Developer Console and create a Line Messaging API account for your ChatBot.
    - Save the Channel Secret and Channel Access Token provided by Line. You need these to authenticate your bot in the `views.py` file.
