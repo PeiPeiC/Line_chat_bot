@@ -15,6 +15,8 @@ To use this Line ChatBot for the CS conversion programme application, follow the
 
 4. **Start to chat!**
 
+https://github.com/PeiPeiC/Line_chat_bot/assets/104357328/3f573f6b-8206-47e1-86be-f90f1230b877
+
 ### For Developers
 1. **Create Line Messaging API Account**:
    - Go to the Line Developer Console and create a Line Messaging API account for your ChatBot.
