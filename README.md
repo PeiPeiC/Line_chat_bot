@@ -12,7 +12,11 @@ To use this Line ChatBot for the CS conversion programme application, follow the
 2. **Scan this QRcode to add a line friend**
 <img width="269" alt="Line chatbot QRcode" src="https://github.com/PeiPeiC/Line_chat_bot/assets/104357328/a21dd7d8-2409-4bc0-9cd0-a3a87b7e9447">
 <img width="269" alt="official account" src="https://github.com/PeiPeiC/Line_chat_bot/assets/104357328/dc3aec4d-3826-47be-b2bb-463b3e6301a0"> 
-https://github.com/PeiPeiC/Line_chat_bot/assets/104357328/3f573f6b-8206-47e1-86be-f90f1230b877
+
+
+https://github.com/PeiPeiC/Line_chat_bot/assets/104357328/2d1dda34-6ddd-4c34-baa5-e77630fb2635
+
+
 4. **Start to chat!**
 
 ### For Developers
