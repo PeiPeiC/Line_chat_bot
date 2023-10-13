@@ -8,14 +8,19 @@ Welcome to our Line ChatBot designed to assist aspiring students interested in t
 To use this Line ChatBot for the CS conversion programme application, follow these steps:
 
 ### For Users
+
 1. **Download Line app**
 2. **Scan this QRcode to add a line friend**
-<img width="269" alt="Line chatbot QRcode" src="https://github.com/PeiPeiC/Line_chat_bot/assets/104357328/a21dd7d8-2409-4bc0-9cd0-a3a87b7e9447">
-<img width="269" alt="official account" src="https://github.com/PeiPeiC/Line_chat_bot/assets/104357328/dc3aec4d-3826-47be-b2bb-463b3e6301a0">
+   
+   ![Line chatbot QRcode](https://github.com/PeiPeiC/Line_chat_bot/assets/104357328/a21dd7d8-2409-4bc0-9cd0-a3a87b7e9447)
+
+   ![official account](https://github.com/PeiPeiC/Line_chat_bot/assets/104357328/dc3aec4d-3826-47be-b2bb-463b3e6301a0)
 3. **Start to chat!**
-https://github.com/PeiPeiC/Line_chat_bot/assets/104357328/2d1dda34-6ddd-4c34-baa5-e77630fb2635
+
+   [Chat Link](https://github.com/PeiPeiC/Line_chat_bot/assets/104357328/2d1dda34-6ddd-4c34-baa5-e77630fb2635)
 
 ### For Developers
+
 1. **Create Line Messaging API Account**:
    - Go to the Line Developer Console and create a Line Messaging API account for your ChatBot.
    - Save the Channel Secret and Channel Access Token provided by Line. You need these to authenticate your bot in the `views.py` file.
