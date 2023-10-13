@@ -17,7 +17,11 @@ To use this Line ChatBot for the CS conversion programme application, follow the
    ![official account](https://github.com/PeiPeiC/Line_chat_bot/assets/104357328/dc3aec4d-3826-47be-b2bb-463b3e6301a0)
 3. **Start to chat!**
 
-   [Chat Link](https://github.com/PeiPeiC/Line_chat_bot/assets/104357328/2d1dda34-6ddd-4c34-baa5-e77630fb2635)
+   
+
+https://github.com/PeiPeiC/Line_chat_bot/assets/104357328/11d11098-9e64-4a3f-aa5b-66aac617655a
+
+
 
 ### For Developers
 
